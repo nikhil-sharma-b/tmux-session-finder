@@ -19,6 +19,7 @@ export TMUX_SESSION_FINDER_SCRIPTS=$script_dir
 export TMUX_SESSION_FINDER_SNAPSHOT=$snapshot_dir
 
 fzf \
+  --height=100% \
   --ansi \
   --delimiter=$'\t' \
   --with-nth='2..' \

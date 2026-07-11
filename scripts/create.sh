@@ -19,4 +19,5 @@ fi
 
 if tmux new-session -d -s "$name"; then
   tmux switch-client -t "=$name"
+  tmux display-popup -C
 fi

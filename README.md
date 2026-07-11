@@ -43,10 +43,13 @@ Set options before loading the plugin:
 
 ```tmux
 set -g @session-finder-key 'F'
-set -g @session-finder-width '85%'
-set -g @session-finder-height '80%'
-set -g @session-finder-border-style 'fg=colour240'
+set -g @session-finder-width '80%'
+set -g @session-finder-height '70%'
+set -g @session-finder-border-style 'fg=brightblack'
+set -g @session-finder-title ''
 ```
+
+The finder uses ANSI terminal colors rather than fixed RGB values, so accents follow the active terminal theme.
 
 ## Performance
 

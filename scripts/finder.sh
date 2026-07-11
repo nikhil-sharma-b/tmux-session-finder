@@ -19,14 +19,22 @@ export TMUX_SESSION_FINDER_SCRIPTS=$script_dir
 export TMUX_SESSION_FINDER_SNAPSHOT=$snapshot_dir
 
 fzf \
+  --ansi \
   --delimiter=$'\t' \
   --with-nth='2..' \
   --no-multi \
   --layout=reverse \
   --border=none \
-  --info=inline \
-  --prompt='sessions> ' \
-  --header='enter switch | ctrl-n new | ctrl-x kill | ctrl-r refresh | esc close' \
+  --no-scrollbar \
+  --separator=' ' \
+  --pointer='▌' \
+  --marker=' ' \
+  --color='fg:-1,bg:-1,hl:4,fg+:-1:regular,bg+:-1,hl+:12,info:8,prompt:8,pointer:4,marker:4,spinner:8,header:8,border:8,gutter:-1' \
+  --info=hidden \
+  --prompt='  ' \
+  --header='↵ switch · ^n new · ^x kill · ^r refresh · esc' \
+  --header-first \
+  --padding='1,2' \
   --preview='"$TMUX_SESSION_FINDER_SCRIPTS/preview.sh" "$TMUX_SESSION_FINDER_SNAPSHOT/panes" {1}' \
   --preview-window='right,55%,border-left' \
   --bind='enter:execute-silent(tmux switch-client -t {1})+abort' \

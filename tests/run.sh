@@ -34,13 +34,18 @@ export PATH="$repo_dir/tests/bin:$PATH"
 call_count=$(awk 'END { print NR }' "$TMUX_CALL_LOG")
 [[ $call_count == 2 ]] || fail "snapshot used $call_count tmux calls, expected 2"
 
-awk -F '\t' '$2 == "work api" && $3 == "2w" && $4 == "2p" { found=1 } END { exit !found }' \
-  "$tmp_dir/output" || fail 'session aggregation incorrect'
+strip_ansi() {
+  awk '{ gsub(/\033\[[0-9;]*m/, ""); print }'
+}
 
-work_id=$(awk -F '\t' '$2 == "work api" { print $1 }' "$tmp_dir/output")
-preview=$("$repo_dir/scripts/preview.sh" "$tmp_dir/panes" "$work_id")
-[[ $preview == *'[0] editor'* ]] || fail 'editor window absent from preview'
-[[ $preview == *'[1] server'* ]] || fail 'server window absent from preview'
+plain_output=$(strip_ansi <"$tmp_dir/output")
+awk -F '\t' '$2 ~ /work api/ && $2 ~ /2 win/ && $2 ~ /2 pane/ { found=1 } END { exit !found }' \
+  <<<"$plain_output" || fail 'session aggregation incorrect'
+
+work_id=$(awk -F '\t' '$2 ~ /work api/ { print $1 }' <<<"$plain_output")
+preview=$("$repo_dir/scripts/preview.sh" "$tmp_dir/panes" "$work_id" | strip_ansi)
+[[ $preview == *'editor · window 0'* ]] || fail 'editor window absent from preview'
+[[ $preview == *'server · window 1'* ]] || fail 'server window absent from preview'
 [[ $preview == *'sleep'* ]] || fail 'foreground command absent from preview'
 
 for script in "$repo_dir"/*.tmux "$repo_dir"/scripts/*.sh "$repo_dir"/tests/*.sh "$repo_dir"/tests/bin/*; do

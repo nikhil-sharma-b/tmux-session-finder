@@ -7,14 +7,17 @@ session_id=${2:-}
 
 [[ -n $session_id && -f $panes_file ]] || exit 0
 
-awk -F '\t' -v id="$session_id" '
+awk -F '\t' -v id="$session_id" -v home="$HOME" '
   $1 == id {
     if (!seen || $2 != window) {
+      if (seen) printf "\n"
       seen = 1
       window = $2
-      printf "\n[%s] %s\n", $2, $3
+      printf "\033[1m%s\033[0m \033[90m· window %s\033[0m\n", $3, $2
     }
-    marker = $5 == "1" ? "*" : " "
-    printf "  %s pane %-3s  %-18s %s\n", marker, $4, $6, $7
+    path = $7
+    if (index(path, home) == 1) path = "~" substr(path, length(home) + 1)
+    mark = $5 == "1" ? "\033[34m›\033[0m" : " "
+    printf "  %s %-14s \033[90m%s\033[0m\n", mark, $6, path
   }
 ' "$panes_file"

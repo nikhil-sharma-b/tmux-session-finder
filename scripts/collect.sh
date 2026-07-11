@@ -13,8 +13,8 @@ tmux list-panes -a -F $'#{session_id}\t#{window_index}\t#{window_name}\t#{pane_i
 awk -F '\t' '
   NR == FNR { panes[$1]++; next }
   {
-    state = $4 == "0" ? "detached" : "attached:" $4
-    printf "%s\t%s\t%sw\t%sp\t%s\t%s\n", $1, $2, $3, panes[$1] + 0, state, $5
+    dot = $4 == "0" ? "\033[90m·\033[0m" : "\033[32m●\033[0m"
+    printf "%s\t%s %-24s\033[90m%2d win · %2d pane\033[0m\n", $1, dot, $2, $3, panes[$1] + 0
   }
 ' "$panes_tmp" "$sessions_tmp" >"$list_tmp"
 

@@ -14,11 +14,12 @@ tmux_option() {
 }
 
 key=$(tmux_option '@session-finder-key' 'F')
-width=$(tmux_option '@session-finder-width' '85%')
-height=$(tmux_option '@session-finder-height' '80%')
-border=$(tmux_option '@session-finder-border-style' 'fg=colour240')
+width=$(tmux_option '@session-finder-width' '80%')
+height=$(tmux_option '@session-finder-height' '70%')
+border=$(tmux_option '@session-finder-border-style' 'fg=brightblack')
+title=$(tmux_option '@session-finder-title' '')
 
-tmux bind-key "$key" display-popup -E \
+tmux bind-key "$key" display-popup -T "$title" -E \
   -w "$width" \
   -h "$height" \
   -b rounded \

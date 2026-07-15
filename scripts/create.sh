@@ -17,7 +17,9 @@ if tmux has-session -t "=$name" 2>/dev/null; then
   exit 0
 fi
 
-if tmux new-session -d -s "$name"; then
+current_path=$(tmux display-message -p '#{pane_current_path}')
+
+if tmux new-session -d -s "$name" -c "$current_path"; then
   tmux switch-client -t "=$name"
   tmux display-popup -C
 fi

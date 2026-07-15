@@ -48,8 +48,13 @@ preview=$("$repo_dir/scripts/preview.sh" "$tmp_dir/panes" "$work_id" | strip_ans
 [[ $preview == *'server · window 1'* ]] || fail 'server window absent from preview'
 [[ $preview == *'sleep'* ]] || fail 'foreground command absent from preview'
 
+"$repo_dir/tmux-session-finder.tmux"
+binding=$("$real_tmux" -L "$socket_name" list-keys -T prefix F)
+[[ $binding == *'display-popup'* && $binding == *'-d /'* ]] || \
+  fail 'finder popup does not use a neutral working directory'
+
 for script in "$repo_dir"/*.tmux "$repo_dir"/scripts/*.sh "$repo_dir"/tests/*.sh "$repo_dir"/tests/bin/*; do
   bash -n "$script" || fail "syntax error in $script"
 done
 
-printf 'PASS: snapshot, aggregation, preview, query count, syntax\n'
+printf 'PASS: snapshot, aggregation, preview, query count, popup cwd, syntax\n'

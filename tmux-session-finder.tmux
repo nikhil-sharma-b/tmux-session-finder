@@ -20,6 +20,7 @@ border=$(tmux_option '@session-finder-border-style' 'fg=brightblack')
 title=$(tmux_option '@session-finder-title' '')
 
 tmux bind-key "$key" display-popup -T "$title" -E \
+  -d / \
   -w "$width" \
   -h "$height" \
   -b rounded \

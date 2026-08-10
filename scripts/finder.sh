@@ -40,13 +40,14 @@ fzf \
   --color='fg:-1,bg:-1,hl:4,fg+:-1:regular,bg+:-1,hl+:12,info:8,prompt:8,pointer:4,marker:4,spinner:8,header:8,border:8,gutter:-1' \
   --info=hidden \
   --prompt='  ' \
-  --header='↵ switch · ^n new · ^x kill · ^r refresh · esc' \
+  --header='↵ switch · ^n new · ^e rename · ^x kill · ^r refresh · esc' \
   --header-first \
   --padding='1,2' \
   --preview='"$TMUX_SESSION_FINDER_SCRIPTS/preview.sh" "$TMUX_SESSION_FINDER_SNAPSHOT/panes" {1}' \
   --preview-window='right,55%,border-left' \
   --bind='enter:execute-silent(tmux switch-client -t {1})+abort' \
   --bind='ctrl-n:execute("$TMUX_SESSION_FINDER_SCRIPTS/create.sh")+reload("$TMUX_SESSION_FINDER_SCRIPTS/collect.sh" "$TMUX_SESSION_FINDER_SNAPSHOT")' \
+  --bind='ctrl-e:execute("$TMUX_SESSION_FINDER_SCRIPTS/rename.sh" {1})+reload("$TMUX_SESSION_FINDER_SCRIPTS/collect.sh" "$TMUX_SESSION_FINDER_SNAPSHOT")' \
   --bind='ctrl-x:execute("$TMUX_SESSION_FINDER_SCRIPTS/kill.sh" {1})+reload("$TMUX_SESSION_FINDER_SCRIPTS/collect.sh" "$TMUX_SESSION_FINDER_SNAPSHOT")' \
   --bind='ctrl-r:reload("$TMUX_SESSION_FINDER_SCRIPTS/collect.sh" "$TMUX_SESSION_FINDER_SNAPSHOT")' \
   <"$snapshot_dir/list" >/dev/null

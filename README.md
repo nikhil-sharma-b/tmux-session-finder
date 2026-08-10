@@ -31,6 +31,7 @@ Reload tmux config after changing installation settings.
 - Type to fuzzy-search session names and metadata.
 - `Enter`: switch to selected session.
 - `Ctrl-n`: create a named session and switch to it.
+- `Ctrl-e`: rename selected session.
 - `Ctrl-x`: confirm and kill selected session.
 - `Ctrl-r`: refresh snapshot.
 - `Esc`: close popup.

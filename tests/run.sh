@@ -46,7 +46,11 @@ work_id=$(awk -F '\t' '$2 ~ /work api/ { print $1 }' <<<"$plain_output")
 preview=$("$repo_dir/scripts/preview.sh" "$tmp_dir/panes" "$work_id" | strip_ansi)
 [[ $preview == *'editor · window 0'* ]] || fail 'editor window absent from preview'
 [[ $preview == *'server · window 1'* ]] || fail 'server window absent from preview'
-[[ $preview == *'sleep'* ]] || fail 'foreground command absent from preview'
+work_command=$(awk -F '\t' -v id="$work_id" '$1 == id { print $6; exit }' "$tmp_dir/panes")
+[[ -n $work_command && $preview == *"$work_command"* ]] || fail 'foreground command absent from preview'
+
+printf 'renamed work\n' | "$repo_dir/scripts/rename.sh" "$work_id"
+"$real_tmux" -L "$socket_name" has-session -t '=renamed work' || fail 'session was not renamed'
 
 "$repo_dir/tmux-session-finder.tmux"
 binding=$("$real_tmux" -L "$socket_name" list-keys -T prefix | grep 'display-popup' || true)
@@ -60,4 +64,4 @@ for script in "$repo_dir"/*.tmux "$repo_dir"/scripts/*.sh "$repo_dir"/tests/*.sh
   bash -n "$script" || fail "syntax error in $script"
 done
 
-printf 'PASS: snapshot, aggregation, preview, query count, popup cwd, syntax\n'
+printf 'PASS: snapshot, aggregation, preview, rename, query count, popup cwd, syntax\n'

@@ -2,7 +2,14 @@
 
 set -euo pipefail
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_dir=${1:-}
+if [[ -z $script_dir ]]; then
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
+
+# fzf runs preview/execute/reload commands through $SHELL. Inside the popup that
+# is the login shell, so every preview would pay its startup cost.
+export SHELL=/bin/sh
 
 if ! command -v fzf >/dev/null 2>&1; then
   printf 'tmux-session-finder requires fzf.\n'

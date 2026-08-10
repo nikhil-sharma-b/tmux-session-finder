@@ -7,7 +7,7 @@ session_id=${2:-}
 
 [[ -n $session_id && -f $panes_file ]] || exit 0
 
-awk -F '\t' -v id="$session_id" -v home="$HOME" '
+exec awk -F '\t' -v id="$session_id" -v home="$HOME" '
   $1 == id {
     if (!seen || $2 != window) {
       if (seen) printf "\n"

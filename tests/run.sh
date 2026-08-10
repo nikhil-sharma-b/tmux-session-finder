@@ -32,7 +32,7 @@ export PATH="$repo_dir/tests/bin:$PATH"
 "$repo_dir/scripts/collect.sh" "$tmp_dir" >"$tmp_dir/output"
 
 call_count=$(awk 'END { print NR }' "$TMUX_CALL_LOG")
-[[ $call_count == 2 ]] || fail "snapshot used $call_count tmux calls, expected 2"
+[[ $call_count == 1 ]] || fail "snapshot used $call_count tmux calls, expected 1"
 
 strip_ansi() {
   awk '{ gsub(/\033\[[0-9;]*m/, ""); print }'
@@ -49,9 +49,12 @@ preview=$("$repo_dir/scripts/preview.sh" "$tmp_dir/panes" "$work_id" | strip_ans
 [[ $preview == *'sleep'* ]] || fail 'foreground command absent from preview'
 
 "$repo_dir/tmux-session-finder.tmux"
-binding=$("$real_tmux" -L "$socket_name" list-keys -T prefix F)
+binding=$("$real_tmux" -L "$socket_name" list-keys -T prefix | grep 'display-popup' || true)
+[[ -n $binding ]] || fail 'finder key binding was not registered'
 [[ $binding == *'display-popup'* && $binding == *'-d /'* ]] || \
   fail 'finder popup does not use a neutral working directory'
+[[ $binding == *'finder.sh'*' '*'scripts'* ]] || \
+  fail 'finder popup passes a single argument, so tmux would run it via default-shell'
 
 for script in "$repo_dir"/*.tmux "$repo_dir"/scripts/*.sh "$repo_dir"/tests/*.sh "$repo_dir"/tests/bin/*; do
   bash -n "$script" || fail "syntax error in $script"

@@ -18,6 +18,7 @@ width=$(tmux_option '@session-finder-width' '80%')
 height=$(tmux_option '@session-finder-height' '70%')
 border=$(tmux_option '@session-finder-border-style' 'fg=brightblack')
 title=$(tmux_option '@session-finder-title' '')
+popup_style=$(tmux_option '@session-finder-popup-style' 'bg=default,fg=default')
 
 # Passing the command as more than one argument makes tmux exec it directly
 # instead of running it through default-shell, which skips shell startup cost.
@@ -27,4 +28,5 @@ tmux bind-key "$key" display-popup -T "$title" -E \
   -h "$height" \
   -b rounded \
   -S "$border" \
+  -s "$popup_style" \
   "$plugin_dir/scripts/finder.sh" "$plugin_dir/scripts"

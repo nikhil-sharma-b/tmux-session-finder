@@ -47,6 +47,7 @@ set -g @session-finder-key 'F'
 set -g @session-finder-width '80%'
 set -g @session-finder-height '70%'
 set -g @session-finder-border-style 'fg=brightblack'
+set -g @session-finder-popup-style 'bg=default,fg=default'
 set -g @session-finder-title ''
 ```
 

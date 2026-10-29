@@ -18,7 +18,7 @@ width=$(tmux_option '@session-finder-width' '80%')
 height=$(tmux_option '@session-finder-height' '70%')
 border=$(tmux_option '@session-finder-border-style' 'fg=brightblack')
 title=$(tmux_option '@session-finder-title' '')
-popup_style=$(tmux_option '@session-finder-popup-style' 'bg=default,fg=default')
+popup_style=$(tmux_option '@session-finder-popup-style' 'bg=terminal,fg=terminal')
 
 # Passing the command as more than one argument makes tmux exec it directly
 # instead of running it through default-shell, which skips shell startup cost.
